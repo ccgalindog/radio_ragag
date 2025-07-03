@@ -1,0 +1,22 @@
+{
+  "english": [
+    { "time": 0, "text": "Every time that I look in the mirror" },
+    { "time": 7, "text": "All these lines on my face getting clearer" },
+    { "time": 15, "text": "The past is gone" },
+    { "time": 25, "text": "It went by like dusk to dawn" },
+    { "time": 35, "text": "Isn't that the way?" },
+    { "time": 45, "text": "Everybody's got their dues in life to pay" },
+    { "time": 55, "text": "I know nobody knows where it comes and where it goes" },
+    { "time": 65, "text": "I know it's everybody's sin, you got to lose to know how to win" }
+  ],
+  "spanish": [
+    { "time": 0, "text": "Cada vez que me miro en el espejo" },
+    { "time": 7, "text": "Todas estas líneas en mi rostro se vuelven más claras" },
+    { "time": 15, "text": "El pasado se ha ido" },
+    { "time": 25, "text": "Pasó como del atardecer al amanecer" },
+    { "time": 35, "text": "¿No es así?" },
+    { "time": 45, "text": "Todo el mundo tiene sus deudas en la vida que pagar" },
+    { "time": 55, "text": "Sé que nadie sabe de dónde viene y a dónde va" },
+    { "time": 65, "text": "Sé que es el pecado de todos, tienes que perder para saber cómo ganar" }
+  ]
+}

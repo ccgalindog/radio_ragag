@@ -1,0 +1,26 @@
+{
+  "english": [
+    { "time": 0, "text": "Is this the real life? Is this just fantasy?" },
+    { "time": 5, "text": "Caught in a landslide, no escape from reality" },
+    { "time": 12, "text": "Open your eyes, look up to the skies and see" },
+    { "time": 20, "text": "I'm just a poor boy, I need no sympathy" },
+    { "time": 30, "text": "Because I'm easy come, easy go, little high, little low" },
+    { "time": 40, "text": "Any way the wind blows doesn't really matter to me, to me" },
+    { "time": 55, "text": "Mama, just killed a man" },
+    { "time": 65, "text": "Put a gun against his head, pulled my trigger, now he's dead" },
+    { "time": 80, "text": "Mama, life had just begun" },
+    { "time": 90, "text": "But now I've gone and thrown it all away" }
+  ],
+  "spanish": [
+    { "time": 0, "text": "¿Es esta la vida real? ¿Es esto solo fantasía?" },
+    { "time": 5, "text": "Atrapado en un deslizamiento, no hay escape de la realidad" },
+    { "time": 12, "text": "Abre tus ojos, mira hacia los cielos y ve" },
+    { "time": 20, "text": "Solo soy un chico pobre, no necesito simpatía" },
+    { "time": 30, "text": "Porque soy fácil de venir, fácil de ir, un poco alto, un poco bajo" },
+    { "time": 40, "text": "De cualquier manera que sople el viento realmente no me importa, a mí" },
+    { "time": 55, "text": "Mamá, acabo de matar a un hombre" },
+    { "time": 65, "text": "Puse una pistola contra su cabeza, apreté el gatillo, ahora está muerto" },
+    { "time": 80, "text": "Mamá, la vida acababa de comenzar" },
+    { "time": 90, "text": "Pero ahora he ido y lo he tirado todo" }
+  ]
+} 

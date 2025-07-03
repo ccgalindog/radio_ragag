@@ -1,0 +1,18 @@
+{
+  "english": [
+    { "time": 0, "text": "I see a red door and I want it painted black" },
+    { "time": 7, "text": "No colors anymore, I want them to turn black" },
+    { "time": 15, "text": "I see the girls walk by dressed in their summer clothes" },
+    { "time": 25, "text": "I have to turn my head until my darkness goes" },
+    { "time": 35, "text": "I see a line of cars and they're all painted black" },
+    { "time": 45, "text": "With flowers and my love both never to come back" }
+  ],
+  "spanish": [
+    { "time": 0, "text": "Veo una puerta roja y quiero que esté pintada de negro" },
+    { "time": 7, "text": "No más colores, quiero que se vuelvan negros" },
+    { "time": 15, "text": "Veo a las chicas pasar vestidas con sus ropas de verano" },
+    { "time": 25, "text": "Tengo que girar la cabeza hasta que mi oscuridad se vaya" },
+    { "time": 35, "text": "Veo una fila de autos y todos están pintados de negro" },
+    { "time": 45, "text": "Con flores y mi amor ambos nunca volverán" }
+  ]
+}

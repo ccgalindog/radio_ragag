@@ -1,0 +1,22 @@
+{
+  "english": [
+    { "time": 0, "text": "Back in black, I hit the sack" },
+    { "time": 7, "text": "I've been too long, I'm glad to be back" },
+    { "time": 15, "text": "Yes, I'm let loose from the noose" },
+    { "time": 25, "text": "That's kept me hanging about" },
+    { "time": 35, "text": "I've been looking at the sky 'cause it's gettin' me high" },
+    { "time": 45, "text": "Forget the hearse 'cause I never die" },
+    { "time": 55, "text": "I've got nine lives, cat's eyes" },
+    { "time": 65, "text": "Abusin' every one of them and running wild" }
+  ],
+  "spanish": [
+    { "time": 0, "text": "De vuelta en negro, me meto en el saco" },
+    { "time": 7, "text": "He estado fuera demasiado tiempo, me alegro de estar de vuelta" },
+    { "time": 15, "text": "Sí, me he soltado de la soga" },
+    { "time": 25, "text": "Que me ha mantenido colgando" },
+    { "time": 35, "text": "He estado mirando al cielo porque me está poniendo alto" },
+    { "time": 45, "text": "Olvida el coche fúnebre porque nunca muero" },
+    { "time": 55, "text": "Tengo nueve vidas, ojos de gato" },
+    { "time": 65, "text": "Abusando de cada una de ellas y corriendo salvaje" }
+  ]
+}

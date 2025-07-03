@@ -1,0 +1,22 @@
+{
+  "english": [
+    { "time": 0, "text": "Hello? Is there anybody in there?" },
+    { "time": 7, "text": "Just nod if you can hear me" },
+    { "time": 15, "text": "Is there anyone at home?" },
+    { "time": 25, "text": "Come on, now, I hear you're feeling down" },
+    { "time": 35, "text": "Well, I can ease your pain" },
+    { "time": 45, "text": "Get you on your feet again" },
+    { "time": 55, "text": "Relax, I'll need some information first" },
+    { "time": 65, "text": "Just the basic facts, can you show me where it hurts?" }
+  ],
+  "spanish": [
+    { "time": 0, "text": "¿Hola? ¿Hay alguien ahí?" },
+    { "time": 7, "text": "Solo asiente si puedes oírme" },
+    { "time": 15, "text": "¿Hay alguien en casa?" },
+    { "time": 25, "text": "Vamos, ahora, escucho que te sientes mal" },
+    { "time": 35, "text": "Bueno, puedo aliviar tu dolor" },
+    { "time": 45, "text": "Ponerte de pie de nuevo" },
+    { "time": 55, "text": "Relájate, necesitaré algo de información primero" },
+    { "time": 65, "text": "Solo los hechos básicos, ¿puedes mostrarme dónde duele?" }
+  ]
+}

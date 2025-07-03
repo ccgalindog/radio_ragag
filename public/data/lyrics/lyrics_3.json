@@ -1,0 +1,24 @@
+{
+  "english": [
+    { "time": 0, "text": "On a dark desert highway, cool wind in my hair" },
+    { "time": 7, "text": "Warm smell of colitas, rising up through the air" },
+    { "time": 15, "text": "Up ahead in the distance, I saw a shimmering light" },
+    { "time": 25, "text": "My head grew heavy and my sight grew dim" },
+    { "time": 35, "text": "I had to stop for the night" },
+    { "time": 45, "text": "There she stood in the doorway; I heard the mission bell" },
+    { "time": 55, "text": "And I was thinking to myself, 'This could be Heaven or this could be Hell'" },
+    { "time": 65, "text": "Then she lit up a candle and she showed me the way" },
+    { "time": 75, "text": "There were voices down the corridor, I thought I heard them say..." }
+  ],
+  "spanish": [
+    { "time": 0, "text": "En una carretera desértica oscura, viento fresco en mi pelo" },
+    { "time": 7, "text": "Olor cálido de colitas, subiendo por el aire" },
+    { "time": 15, "text": "Más adelante en la distancia, vi una luz brillante" },
+    { "time": 25, "text": "Mi cabeza se volvió pesada y mi vista se nubló" },
+    { "time": 35, "text": "Tuve que parar por la noche" },
+    { "time": 45, "text": "Allí estaba ella en la puerta; escuché la campana de la misión" },
+    { "time": 55, "text": "Y pensaba para mí mismo, 'Esto podría ser el Cielo o esto podría ser el Infierno'" },
+    { "time": 65, "text": "Entonces encendió una vela y me mostró el camino" },
+    { "time": 75, "text": "Había voces por el corredor, pensé que las escuché decir..." }
+  ]
+} 

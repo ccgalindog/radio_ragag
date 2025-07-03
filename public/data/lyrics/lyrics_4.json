@@ -1,0 +1,20 @@
+{
+  "english": [
+    { "time": 0, "text": "She's got a smile that it seems to me" },
+    { "time": 7, "text": "Reminds me of childhood memories" },
+    { "time": 15, "text": "Where everything was as fresh as the bright blue sky" },
+    { "time": 25, "text": "Now and then when I see her face" },
+    { "time": 35, "text": "She takes me away to that special place" },
+    { "time": 45, "text": "And if I stare too long, I'd probably break down and cry" },
+    { "time": 60, "text": "Whoa, oh, oh, sweet child o' mine" }
+  ],
+  "spanish": [
+    { "time": 0, "text": "Ella tiene una sonrisa que me parece" },
+    { "time": 7, "text": "Me recuerda los recuerdos de la infancia" },
+    { "time": 15, "text": "Donde todo era tan fresco como el cielo azul brillante" },
+    { "time": 25, "text": "De vez en cuando cuando veo su rostro" },
+    { "time": 35, "text": "Ella me lleva a ese lugar especial" },
+    { "time": 45, "text": "Y si miro demasiado tiempo, probablemente me derrumbaría y lloraría" },
+    { "time": 60, "text": "Whoa, oh, oh, dulce niño mío" }
+  ]
+}

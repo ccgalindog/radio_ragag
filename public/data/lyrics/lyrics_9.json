@@ -1,0 +1,22 @@
+{
+  "english": [
+    { "time": 0, "text": "If I leave here tomorrow" },
+    { "time": 7, "text": "Would you still remember me?" },
+    { "time": 15, "text": "For I must be traveling on, now" },
+    { "time": 25, "text": "'Cause there's too many places I've got to see" },
+    { "time": 35, "text": "But if I stayed here with you, girl" },
+    { "time": 45, "text": "Things just couldn't be the same" },
+    { "time": 55, "text": "'Cause I'm as free as a bird now" },
+    { "time": 65, "text": "And this bird you cannot change" }
+  ],
+  "spanish": [
+    { "time": 0, "text": "Si me voy de aquí mañana" },
+    { "time": 7, "text": "¿Todavía me recordarías?" },
+    { "time": 15, "text": "Porque debo estar viajando ahora" },
+    { "time": 25, "text": "Porque hay demasiados lugares que tengo que ver" },
+    { "time": 35, "text": "Pero si me quedara aquí contigo, chica" },
+    { "time": 45, "text": "Las cosas simplemente no serían iguales" },
+    { "time": 55, "text": "Porque soy tan libre como un pájaro ahora" },
+    { "time": 65, "text": "Y a este pájaro no puedes cambiar" }
+  ]
+}

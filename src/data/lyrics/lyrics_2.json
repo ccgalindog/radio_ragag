@@ -1,0 +1,20 @@
+{
+  "english": [
+    { "time": 0, "text": "There's a lady who's sure all that glitters is gold" },
+    { "time": 7, "text": "And she's buying a stairway to heaven" },
+    { "time": 15, "text": "When she gets there she knows, if the stores are all closed" },
+    { "time": 25, "text": "With a word she can get what she came for" },
+    { "time": 35, "text": "Ooh, ooh, and she's buying a stairway to heaven" },
+    { "time": 50, "text": "There's a sign on the wall but she wants to be sure" },
+    { "time": 60, "text": "'Cause you know sometimes words have two meanings" }
+  ],
+  "spanish": [
+    { "time": 0, "text": "Hay una dama que está segura de que todo lo que brilla es oro" },
+    { "time": 7, "text": "Y está comprando una escalera al cielo" },
+    { "time": 15, "text": "Cuando llegue allí sabrá, si las tiendas están cerradas" },
+    { "time": 25, "text": "Con una palabra puede obtener lo que vino a buscar" },
+    { "time": 35, "text": "Ooh, ooh, y está comprando una escalera al cielo" },
+    { "time": 50, "text": "Hay una señal en la pared pero ella quiere estar segura" },
+    { "time": 60, "text": "Porque sabes que a veces las palabras tienen dos significados" }
+  ]
+} 

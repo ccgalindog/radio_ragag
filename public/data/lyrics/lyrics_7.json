@@ -1,0 +1,20 @@
+{
+  "english": [
+    { "time": 0, "text": "We all came out to Montreux" },
+    { "time": 7, "text": "On the Lake Geneva shoreline" },
+    { "time": 15, "text": "To make records with a mobile" },
+    { "time": 25, "text": "We didn't have much time" },
+    { "time": 35, "text": "Frank Zappa and the Mothers were at the best place around" },
+    { "time": 45, "text": "But some stupid with a flare gun burned the place to the ground" },
+    { "time": 55, "text": "Smoke on the water, fire in the sky" }
+  ],
+  "spanish": [
+    { "time": 0, "text": "Todos salimos a Montreux" },
+    { "time": 7, "text": "En la orilla del lago Ginebra" },
+    { "time": 15, "text": "Para hacer discos con un móvil" },
+    { "time": 25, "text": "No teníamos mucho tiempo" },
+    { "time": 35, "text": "Frank Zappa y las Mothers estaban en el mejor lugar" },
+    { "time": 45, "text": "Pero algún estúpido con una pistola de bengalas quemó el lugar" },
+    { "time": 55, "text": "Humo en el agua, fuego en el cielo" }
+  ]
+}
