@@ -54,25 +54,17 @@ const App: React.FC = () => {
     const handleFullScreenChange = () => {
       const wasFullScreen = isFullScreen;
       const isNowFullScreen = !!document.fullscreenElement;
-      
+
       setIsFullScreen(isNowFullScreen);
-      
+
       // If exiting full-screen (via Escape key or other methods)
       if (wasFullScreen && !isNowFullScreen) {
         setShowFullScreenControls(false);
-        
-        // Preserve current playback state
-        if (youtubePlayerRef.current) {
-          const currentTime = youtubePlayerRef.current.getCurrentTime();
-          const isPlaying = playerState.isPlaying;
-          setLastRecordedTime(currentTime);
-          console.log('Recording time before exiting full-screen:', currentTime);
-        }
       }
     };
 
     document.addEventListener('fullscreenchange', handleFullScreenChange);
-    
+
     return () => {
       document.removeEventListener('fullscreenchange', handleFullScreenChange);
     };
@@ -81,11 +73,11 @@ const App: React.FC = () => {
   // Handle mouse movement in full-screen mode
   const handleFullScreenMouseMove = (e: React.MouseEvent) => {
     if (!isFullScreen) return;
-    
+
     const windowHeight = window.innerHeight;
     const mouseY = e.clientY;
     const threshold = 200; // Increased from 100px to 200px for easier access
-    
+
     if (mouseY > windowHeight - threshold) {
       setShowFullScreenControls(true);
     } else {
@@ -105,10 +97,10 @@ const App: React.FC = () => {
       youtubePlayerRef.current.destroy();
       youtubePlayerRef.current = null;
     }
-    
+
     // Reset recorded time for new song
     setLastRecordedTime(0);
-    
+
     setPlayerState(prev => ({
       ...prev,
       currentSongIndex: index,
@@ -134,10 +126,10 @@ const App: React.FC = () => {
       youtubePlayerRef.current.destroy();
       youtubePlayerRef.current = null;
     }
-    
+
     // Reset recorded time for new song
     setLastRecordedTime(0);
-    
+
     setPlayerState(prev => ({
       ...prev,
       currentSongIndex: prev.currentSongIndex === 0 ? playlist.length - 1 : prev.currentSongIndex - 1,
@@ -153,16 +145,16 @@ const App: React.FC = () => {
       youtubePlayerRef.current.destroy();
       youtubePlayerRef.current = null;
     }
-    
+
     // Reset recorded time for new song
     setLastRecordedTime(0);
-    
+
     // Check if there are queued songs
     if (queue.length > 0) {
       // Play the first queued song
       const nextQueuedSong = queue[0];
       const queuedSongIndex = playlist.findIndex(song => song.id === nextQueuedSong.songId);
-      
+
       if (queuedSongIndex !== -1) {
         // Remove the song from queue and play it
         setQueue(prevQueue => prevQueue.slice(1));
@@ -176,7 +168,7 @@ const App: React.FC = () => {
         return;
       }
     }
-    
+
     // If no queued songs, play next song in playlist
     setPlayerState(prev => ({
       ...prev,
@@ -189,12 +181,12 @@ const App: React.FC = () => {
 
   const handleShuffle = () => {
     console.log('Shuffle pressed - Current playlist order:', playlist.map(song => song.title));
-    
+
     // Create a copy of the current playlist
     let shuffledPlaylist = [...playlist];
     let attempts = 0;
     const maxAttempts = 10;
-    
+
     // Keep shuffling until we get a different order or reach max attempts
     do {
       // Fisher-Yates shuffle algorithm
@@ -204,19 +196,19 @@ const App: React.FC = () => {
       }
       attempts++;
     } while (
-      attempts < maxAttempts && 
+      attempts < maxAttempts &&
       JSON.stringify(shuffledPlaylist.map(s => s.id)) === JSON.stringify(playlist.map(s => s.id))
     );
-    
+
     console.log('Shuffled playlist order:', shuffledPlaylist.map(song => song.title));
     console.log('Shuffle attempts:', attempts);
-    
+
     // Find the current song in the new shuffled playlist
     const currentSongId = currentSong.id;
     const newIndex = shuffledPlaylist.findIndex(song => song.id === currentSongId);
-    
+
     console.log('Current song:', currentSong.title, 'New index:', newIndex);
-    
+
     // Update the playlist and set the current song index
     setPlaylist(shuffledPlaylist);
     setPlayerState(prev => ({
@@ -227,20 +219,9 @@ const App: React.FC = () => {
 
   const handleFullScreen = () => {
     if (!document.fullscreenElement) {
-      // Record current time before entering full-screen
-      if (youtubePlayerRef.current) {
-        const currentTime = youtubePlayerRef.current.getCurrentTime();
-        setLastRecordedTime(currentTime);
-        console.log('Recording time before full-screen:', currentTime);
-        
-        // Destroy the current player
-        youtubePlayerRef.current.destroy();
-        youtubePlayerRef.current = null;
-      }
-      
       // Switch to fullscreen mode
       setActivePlayerMode('fullscreen');
-      
+
       // Enter full-screen mode
       document.documentElement.requestFullscreen().then(() => {
         setIsFullScreen(true);
@@ -250,20 +231,9 @@ const App: React.FC = () => {
         setActivePlayerMode('normal');
       });
     } else {
-      // Record current time before exiting full-screen
-      if (youtubePlayerRef.current) {
-        const currentTime = youtubePlayerRef.current.getCurrentTime();
-        setLastRecordedTime(currentTime);
-        console.log('Recording time before exiting full-screen:', currentTime);
-        
-        // Destroy the current player
-        youtubePlayerRef.current.destroy();
-        youtubePlayerRef.current = null;
-      }
-      
       // Switch to normal mode
       setActivePlayerMode('normal');
-      
+
       // Exit full-screen mode
       document.exitFullscreen().then(() => {
         setIsFullScreen(false);
@@ -278,7 +248,7 @@ const App: React.FC = () => {
   const handleQueueSelect = (songId: string) => {
     setQueue(prevQueue => {
       const isAlreadyQueued = prevQueue.some(item => item.songId === songId);
-      
+
       if (isAlreadyQueued) {
         // Remove from queue
         return prevQueue.filter(item => item.songId !== songId);
@@ -302,7 +272,7 @@ const App: React.FC = () => {
       youtubePlayerRef.current.seekTo(time);
       // Immediately update the current time state for lyrics synchronization
       setPlayerState(prev => ({ ...prev, currentTime: time }));
-      
+
       // Restart the time tracking interval if it was stopped
       if (!timeUpdateIntervalRef.current && playerState.isPlaying) {
         timeUpdateIntervalRef.current = setInterval(() => {
@@ -325,22 +295,22 @@ const App: React.FC = () => {
   const onYouTubeReady = (event: any) => {
     youtubePlayerRef.current = event.target;
     event.target.setVolume(playerState.volume * 100);
-    
+
     // Get initial duration
     const duration = event.target.getDuration();
     setPlayerState(prev => ({ ...prev, duration }));
-    
+
     // Seek to the last recorded time if available
     if (lastRecordedTime > 0) {
       console.log('Seeking to recorded time:', lastRecordedTime);
       event.target.seekTo(lastRecordedTime);
       setPlayerState(prev => ({ ...prev, currentTime: lastRecordedTime }));
-      
+
       // Auto-play if the player state indicates it should be playing
       if (playerState.isPlaying) {
         event.target.playVideo();
       }
-      
+
       // Reset the recorded time
       setLastRecordedTime(0);
     } else {
@@ -354,7 +324,7 @@ const App: React.FC = () => {
   const onYouTubeStateChange = (event: any) => {
     const state = event.target.getPlayerState();
     // YouTube states: -1 (unstarted), 0 (ended), 1 (playing), 2 (paused), 3 (buffering), 5 (video cued)
-    
+
     if (state === 1) { // Playing
       setPlayerState(prev => ({ ...prev, isPlaying: true }));
       // Start time tracking
@@ -382,7 +352,7 @@ const App: React.FC = () => {
       // Get duration when video is loaded
       const duration = event.target.getDuration();
       setPlayerState(prev => ({ ...prev, duration }));
-      
+
       // Auto-play if the player state indicates it should be playing
       if (playerState.isPlaying) {
         event.target.playVideo();
@@ -424,18 +394,18 @@ const App: React.FC = () => {
         </div>
       ) : (
         <>
-          {/* Normal Mode Layout */}
-          <div className={`${isFullScreen ? 'hidden' : 'max-w-7xl mx-auto'}`}>
-            {/* Header */}
-            <div className="text-center mb-6">
+          {/* Main Layout Container */}
+          <div className="max-w-7xl mx-auto">
+            {/* Header - Hidden in full-screen */}
+            <div className={`text-center mb-6 ${isFullScreen ? 'hidden' : ''}`}>
               <div className="flex items-center justify-center gap-4 mb-2">
-                <img 
-                  src="/images/logo.png" 
-                  alt="Radio RAGAG Logo" 
+                <img
+                  src="/images/logo.png"
+                  alt="Radio RAGAG Logo"
                   className="w-12 h-12 object-contain"
                 />
                 <h1 className="text-4xl font-bold text-gradient">
-                  Radio RAGAG 
+                  Radio RAGAG
                 </h1>
               </div>
               <p className="text-white/70">
@@ -443,10 +413,10 @@ const App: React.FC = () => {
               </p>
             </div>
 
-            {/* Main Content */}
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 h-[calc(100vh-280px)]">
-              {/* Left Column - Fun Facts */}
-              <div className="lg:col-span-1">
+            {/* Main Content Grid */}
+            <div className={isFullScreen ? "" : "grid grid-cols-1 lg:grid-cols-4 gap-6 h-[calc(100vh-280px)]"}>
+              {/* Left Column - Fun Facts - Hidden in full-screen */}
+              <div className={`lg:col-span-1 ${isFullScreen ? 'hidden' : ''}`}>
                 <FunFacts
                   funFacts={currentSong.funFacts}
                   songTitle={currentSong.title}
@@ -455,19 +425,17 @@ const App: React.FC = () => {
               </div>
 
               {/* Center Column - Video Player and Lyrics */}
-              <div className="lg:col-span-2 flex flex-col h-full">
+              <div className={isFullScreen ? "fixed inset-0 z-0 bg-dark-900" : "lg:col-span-2 flex flex-col h-full"}>
                 <div className="h-full rounded-lg overflow-hidden flex-1">
-                  {activePlayerMode === 'normal' && (
-                    <VideoPlayer
-                      videoId={currentSong.youtubeId}
-                      onReady={onYouTubeReady}
-                      onStateChange={onYouTubeStateChange}
-                      onError={onYouTubeError}
-                    />
-                  )}
+                  <VideoPlayer
+                    videoId={currentSong.youtubeId}
+                    onReady={onYouTubeReady}
+                    onStateChange={onYouTubeStateChange}
+                    onError={onYouTubeError}
+                  />
                 </div>
-                {/* Lyrics Display below the video */}
-                <div className="w-full">
+                {/* Lyrics Display below the video - Hidden in full-screen (moved to overlay) */}
+                <div className={`w-full ${isFullScreen ? 'hidden' : ''}`}>
                   <LyricsDisplay
                     songId={currentSong.id}
                     currentTime={playerState.currentTime}
@@ -476,8 +444,8 @@ const App: React.FC = () => {
                 </div>
               </div>
 
-              {/* Right Column - Playlist */}
-              <div className="lg:col-span-1 h-full">
+              {/* Right Column - Playlist - Hidden in full-screen */}
+              <div className={`lg:col-span-1 h-full ${isFullScreen ? 'hidden' : ''}`}>
                 <Playlist
                   songs={playlist}
                   currentSongIndex={playerState.currentSongIndex}
@@ -488,8 +456,8 @@ const App: React.FC = () => {
               </div>
             </div>
 
-            {/* Player Controls - Fixed at bottom */}
-            <div className="mt-4">
+            {/* Player Controls - Fixed at bottom - Hidden in full-screen (moved to overlay) */}
+            <div className={`mt-4 ${isFullScreen ? 'hidden' : ''}`}>
               <PlayerControls
                 isPlaying={playerState.isPlaying}
                 currentTime={playerState.currentTime}
@@ -507,19 +475,9 @@ const App: React.FC = () => {
             </div>
           </div>
 
-          {/* Full Screen Mode */}
+          {/* Full Screen Overlays */}
           {isFullScreen && activePlayerMode === 'fullscreen' && (
             <>
-              {/* Full-screen video player */}
-              <div className="absolute inset-0 z-0">
-                <VideoPlayer
-                  videoId={currentSong.youtubeId}
-                  onReady={onYouTubeReady}
-                  onStateChange={onYouTubeStateChange}
-                  onError={onYouTubeError}
-                />
-              </div>
-              
               {/* Lyrics Overlay */}
               <div className="absolute bottom-4 left-4 right-4 z-10">
                 <div className="bg-black/50 backdrop-blur-sm rounded-lg p-4">
@@ -532,15 +490,14 @@ const App: React.FC = () => {
               </div>
 
               {/* Controls Overlay */}
-              <div 
+              <div
                 className="absolute inset-0 z-20 pointer-events-none"
                 onMouseMove={handleFullScreenMouseMove}
                 onMouseLeave={handleFullScreenMouseLeave}
               >
-                <div className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent transition-all duration-300 pointer-events-auto ${
-                  showFullScreenControls ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-full'
-                }`}>
-                  <div 
+                <div className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent transition-all duration-300 pointer-events-auto ${showFullScreenControls ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-full'
+                  }`}>
+                  <div
                     className="px-4 pb-4"
                     onMouseEnter={() => setShowFullScreenControls(true)}
                     onMouseLeave={() => setShowFullScreenControls(false)}
