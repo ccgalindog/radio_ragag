@@ -1,5 +1,5 @@
 Give your listeners some fun facts about the song which will play next: {song} by {artist}.
-Look for information about the song in the internet, then return your answer as an engaging cohesive and brief paragraph script for your listeners.
+Look for information about the song and the artist in the internet, then return your answer as an engaging cohesive and brief paragraph script for your listeners.
 Then use that text to generate a voice comment for your audience. Your final response should be a JSON with the following 2 fields:
 
 1. comment: [YOUR COMMENT AS A DJ ABOUT THE SONG]
