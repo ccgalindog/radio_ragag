@@ -49,12 +49,8 @@ class GemmaChatModel(BaseChatModel):
                                max_new_tokens=kwargs.get("max_new_tokens", 512))
         
         # Extract the assistant's response
-        # The output format for chat-mode pipeline is a list of dicts or a list
-        # of list of dicts
         if isinstance(output, list) and len(output) > 0:
             generated_text = output[0]["generated_text"]
-            # HF chat pipeline returns the full conversation, we need the
-            # last assistant message
             if isinstance(generated_text, list):
                 response_text = generated_text[-1]["content"]
             else:
@@ -65,6 +61,11 @@ class GemmaChatModel(BaseChatModel):
         message = AIMessage(content=response_text)
         generation = ChatGeneration(message=message)
         return ChatResult(generations=[generation])
+
+    def bind_tools(self, tools: List[Any], **kwargs: Any) -> Any:
+        # For create_react_agent to work, we need to implement bind_tools
+        # For now, we just bind them so they're available in self.kwargs
+        return self.bind(tools=tools, **kwargs)
 
     @property
     def _llm_type(self) -> str:
@@ -85,7 +86,7 @@ def init_agent(use_local=True):
     return music_agent, system_prompt
 
 
-def text_generator():
+def text_generator(song="Bohemian Rhapsody", artist="Queen"):
     system_prompt = open(SYSTEM_PROMPT_PATH, "r").read()
     funfacts_prompt_template = open(FUNFACTS_PROMPT_PATH, "r").read()
     funfacts_prompt = funfacts_prompt_template.format(song=song, artist=artist)
