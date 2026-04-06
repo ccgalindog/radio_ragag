@@ -1,9 +1,10 @@
-import torch
 import soundfile as sf
 from kokoro import KPipeline
+from datetime import datetime
 
 
-def create_steered_voice(base_name,
+def create_steered_voice(pipeline,
+                         base_name,
                          trait_name,
                          neutral_ref_name='af_sarah',
                          strength=0.3):
@@ -22,7 +23,8 @@ def create_steered_voice(base_name,
     return steered_voice
 
 
-def init_kokoro_voice(base_name='am_michael',
+def init_kokoro_voice(lang_code='a',
+                      base_name='am_michael',
                       trait_name='af_bella',
                       strength=0.4):
     """
@@ -34,34 +36,58 @@ def init_kokoro_voice(base_name='am_michael',
     Returns:
         KokoroVoice: The initialized Kokoro voice model.
     """
+    pipeline = KPipeline(lang_code=lang_code) 
     radio_host_voice = create_steered_voice(
+        pipeline=pipeline,
         base_name=base_name, 
         trait_name=trait_name, 
         strength=strength
     )
-    return radio_host_voice
+    return pipeline, radio_host_voice
 
 
 def generate_voice_comment(text,
+                           pipeline,
                            radio_voice,
                            output_path,
-                           lang_code='a',
                            speed=1.05):
     """
     Generates a voice comment for a given text.
     Args:
         text (str): The text to generate a voice comment for.
+        pipeline (KPipeline): The initialized Kokoro pipeline.
         radio_voice (KokoroVoice): The initialized Kokoro voice model.
         output_path (str): The path to save the generated wav file.
-        lang_code (str): The language code for the voice comment.
         speed (float): The speed of the voice comment.
     Returns:
         str: The path to the generated wav file.
     """
-    pipeline = KPipeline(lang_code=lang_code) 
     generator = pipeline(text, voice=radio_voice, speed=speed)
     complete_audio = []
     for j, (gs, ps, audio) in enumerate(generator):
-        complete_audio.append(audio)
+        complete_audio.extend(audio)
     sf.write(output_path, complete_audio, 24000)
     return output_path
+
+
+def text_to_speech(text: str) -> str:
+    """
+    This function generates a voice comment for a given text.
+    It uses the Kokoro model to generate the voice comment.
+    It saves the voice comment as a wav file, the output of this function is
+    the path to such file.
+    Args:
+        text (str): The text to generate a voice comment for.
+    Returns:
+        str: The path to the generated wav file.
+    """
+    execution_time = str(datetime.today()).replace(" ", "_")\
+                                          .replace(":", "_").split('.')[0]
+    output_filename = f"../data/voice_comments/{execution_time}.wav"
+    kokoro_pipeline, announcer_voice = init_kokoro_voice()
+    output_filename = generate_voice_comment(text,
+                                             kokoro_pipeline,
+                                             announcer_voice,
+                                             output_filename,
+                                             speed=1.05)
+    return output_filename

@@ -1,6 +1,5 @@
 Give your listeners some fun facts about the song which will play next: {song} by {artist}.
 Look for information about the song and the artist in the internet, then return your answer as an engaging cohesive and brief paragraph script for your listeners.
-Then use that text to generate a voice comment for your audience. Your final response should be a JSON with the following 2 fields:
-
-1. comment: [YOUR COMMENT AS A DJ ABOUT THE SONG]
-2. voice_filename : [PATH WHERE THE WAV FILE OF THE COMMENT WAS STORED]
+Keep your script grounded to actual facts about the song or the artist, never create information that you didn't get through your internet query with the search tool.
+Be sure to include in your fun facts as a minimum: the year the song was released, the album it belongs to (if any) and the name of the original author or composer.
+Don't return anything else besides what you are going to explicitly say on the mic to the audience.

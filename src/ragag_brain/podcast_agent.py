@@ -1,100 +1,158 @@
-from langchain_core.messages import HumanMessage, SystemMessage, BaseMessage,\
-                                    AIMessage
-from langchain_openai import OpenAI, ChatOpenAI
-from langchain_community.tools import DuckDuckGoSearchRun
-from langgraph.prebuilt import create_react_agent
-from langchain_core.prompts import PromptTemplate
-from langchain_core.language_models.chat_models import BaseChatModel
-from langchain_core.outputs import ChatResult, ChatGeneration
-from transformers import pipeline
-import torch
-from typing import List, Optional, Any
+import re
+from transformers import AutoProcessor, AutoModelForMultimodalLM
+from agent_tools import search_tool
+from kokoro_voice import text_to_speech
+
 
 SYSTEM_PROMPT_PATH = "./prompts/system_prompt.txt"
 FUNFACTS_PROMPT_PATH = "./prompts/funfacts_prompt.txt"
-LLM_NAME = "gpt-4o-mini"
+MODEL_ID = "google/gemma-4-E2B-it"
 
 
-class GemmaChatModel(BaseChatModel):
-    pipeline: Any = None
 
-    def __init__(self, model_id: str = "google/gemma-3-1b-it", **kwargs):
-        super().__init__(**kwargs)
-        self.pipeline = pipeline(
-            "text-generation",
-            model=model_id,
-            device="mps",
-            torch_dtype=torch.bfloat16
-        )
-
-    def _generate(
-        self,
-        messages: List[BaseMessage],
-        stop: Optional[List[str]] = None,
-        run_manager: Optional[Any] = None,
-        **kwargs: Any,
-    ) -> ChatResult:
-        # Convert LangChain messages to Hugging Face format
-        hf_messages = []
-        for m in messages:
-            if isinstance(m, SystemMessage):
-                hf_messages.append({"role": "system", "content": m.content})
-            elif isinstance(m, HumanMessage):
-                hf_messages.append({"role": "user", "content": m.content})
-            elif isinstance(m, AIMessage):
-                hf_messages.append({"role": "assistant", "content": m.content})
-
-        # Run the pipeline
-        output = self.pipeline(hf_messages,
-                               max_new_tokens=kwargs.get("max_new_tokens", 512))
-        
-        # Extract the assistant's response
-        if isinstance(output, list) and len(output) > 0:
-            generated_text = output[0]["generated_text"]
-            if isinstance(generated_text, list):
-                response_text = generated_text[-1]["content"]
-            else:
-                response_text = generated_text
-        else:
-            response_text = "Error: No output from model"
-
-        message = AIMessage(content=response_text)
-        generation = ChatGeneration(message=message)
-        return ChatResult(generations=[generation])
-
-    def bind_tools(self, tools: List[Any], **kwargs: Any) -> Any:
-        # For create_react_agent to work, we need to implement bind_tools
-        # For now, we just bind them so they're available in self.kwargs
-        return self.bind(tools=tools, **kwargs)
-
-    @property
-    def _llm_type(self) -> str:
-        return "gemma-3-hf"
+class PodcastAgent:
+    """
+    Class that represents the podcast agent.
+    """
+    def __init__(self):
+        self.model_id = MODEL_ID
+        self.system_prompt = open(SYSTEM_PROMPT_PATH, "r").read()
+        self.funfacts_prompt_template = open(FUNFACTS_PROMPT_PATH, "r").read()
+        self.model = AutoModelForMultimodalLM.from_pretrained(self.model_id,
+                                                              dtype="auto",
+                                                              device_map="auto")
+        self.processor = AutoProcessor.from_pretrained(self.model_id)
+        self.tools = [search_tool]
 
 
-def init_agent(use_local=True):
-    system_prompt = open(SYSTEM_PROMPT_PATH, "r").read()
-    # voice_model = init_voice_model() # Assuming it's defined elsewhere or handled
-    
-    if use_local:
-        llm = GemmaChatModel()
-    else:
-        llm = ChatOpenAI(model=LLM_NAME)
-        
-    search_tool = DuckDuckGoSearchRun()
-    music_agent = create_react_agent(llm, [search_tool]) # Simplified for now
-    return music_agent, system_prompt
+    def create_podcast_agent_plan(self, message: list) -> str:
+        """
+        Function that uses an agent to plan how to use tools to solve
+        users requests.
+        Args:
+            message (list): The message to create a podcast dialog for.
+        Returns:
+            str: The plan for the podcast dialog.
+        """
+        text = self.processor.apply_chat_template(message,
+                                                  tools=self.tools,
+                                                  tokenize=False,
+                                                  add_generation_prompt=True,
+                                                  enable_thinking=True)
+        inputs = self.processor(text=text, return_tensors="pt")\
+                     .to(self.model.device)
+        model_output = self.model.generate(**inputs, max_new_tokens=1280)
+        generated_tokens = model_output[0][len(inputs["input_ids"][0]):]
+        llm_plan = self.processor.decode(generated_tokens,
+                                         skip_special_tokens=False)
+        return llm_plan
 
 
-def text_generator(song="Bohemian Rhapsody", artist="Queen"):
-    system_prompt = open(SYSTEM_PROMPT_PATH, "r").read()
-    funfacts_prompt_template = open(FUNFACTS_PROMPT_PATH, "r").read()
-    funfacts_prompt = funfacts_prompt_template.format(song=song, artist=artist)
+    def extract_tool_calls(self, text: str) -> list:
+        """
+        Extracts tool calls from the text.
+        Args:
+            text (str): The text to extract tool calls from.
+        Returns:
+            list: A list of tool calls.
+        """
+        def cast(v):
+            try:
+                return int(v)
+            except:
+                try:
+                    return float(v)
+                except:
+                    return {'true': True, 'false': False}.get(v.lower(),
+                                                            v.strip("'\""))
+        return [{
+            "name": name,
+            "arguments": {
+                k: cast((v1 or v2).strip())
+                for k, v1, v2\
+                  in re.findall(r'(\w+):(?:<\|"\|>(.*?)<\|"\|>|([^,}]*))', args)
+            }
+        } for name, args\
+            in re.findall(r"<\|tool_call>call:(\w+)\{(.*?)\}<tool_call\|>",
+                            text, re.DOTALL)]
 
-    model = GemmaChatModel()
-    messages = [SystemMessage(content=system_prompt),
-                HumanMessage(content=funfacts_prompt)
-               ]
-    output = model.invoke(messages)
-    return output.content
 
+    def get_tools_responses(self, calls: list, message: list) -> list:
+        """
+        Gets the responses from the tool calls.
+        Args:
+            calls (list): The list of tool calls.
+            message (list): The message to append the tool responses to.
+        Returns:
+            list: The message with the tool responses appended.
+        """
+        if calls:
+            results = [
+                {"name": c['name'],
+                "response": globals()[c['name']](**c['arguments'])}
+                for c in calls
+            ]
+            message.append({
+                "role": "assistant",
+                "tool_calls": [
+                    {"function": call} for call in calls
+                ],
+                "tool_responses": results
+            })
+        return message
+
+
+    def create_podcast_dialog(self, message: list) -> tuple:
+        """
+        Creates a podcast dialog.
+        Args:
+            message (list): The message to create a podcast dialog for.
+        Returns:
+            tuple: A tuple containing the output and the message.
+        """
+        text = self.processor.apply_chat_template(message,
+                                                  tools=self.tools,
+                                                  tokenize=False,
+                                                  add_generation_prompt=True)
+        inputs = self.processor(text=text, return_tensors="pt")\
+                     .to(self.model.device)
+        out = self.model.generate(**inputs, max_new_tokens=1280)
+        generated_tokens = out[0][len(inputs["input_ids"][0]):]
+        output = self.processor.decode(generated_tokens,
+                                       skip_special_tokens=True)
+        message[-1]["content"] = output
+        return output, message
+
+
+    def get_funfacts_request(self, song: str, artist: str) -> list:
+        """
+        Gets the funfacts request for a given song and artist.
+        Args:
+            song (str): The song to get funfacts for.
+            artist (str): The artist to get funfacts for.
+        Returns:
+            list: A list containing the system prompt and the funfacts prompt.
+        """
+        funfacts_prompt = self.funfacts_prompt_template.format(song=song,
+                                                               artist=artist)
+        message = [{"role": "system", "content": self.system_prompt},
+                   {"role": "user", "content": funfacts_prompt}]
+        return message
+
+
+    def funfact_comment_pipeline(self, song: str, artist: str) -> str:
+        """
+        Creates a funfact comment for a given song and artist.
+        Args:
+            song (str): The song to create a funfact comment for.
+            artist (str): The artist to create a funfact comment for.
+        Returns:
+            str: The path to the generated wav file.
+        """
+        message = self.get_funfacts_request(song, artist)
+        final_output = self.create_podcast_agent_plan(message)
+        calls = self.extract_tool_calls(final_output)
+        message = self.get_tools_responses(calls, message)
+        podcast_script, message = self.create_podcast_dialog(message)
+        audio_path = text_to_speech(podcast_script)
+        return audio_path
