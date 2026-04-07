@@ -1,3 +1,4 @@
+import os
 import soundfile as sf
 from kokoro import KPipeline
 from datetime import datetime
@@ -83,7 +84,10 @@ def text_to_speech(text: str) -> str:
     """
     execution_time = str(datetime.today()).replace(" ", "_")\
                                           .replace(":", "_").split('.')[0]
-    output_filename = f"../data/voice_comments/{execution_time}.wav"
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    output_dir = os.path.join(base_dir, '..', 'data', 'voice_comments')
+    os.makedirs(output_dir, exist_ok=True)
+    output_filename = os.path.join(output_dir, f"{execution_time}.wav")
     kokoro_pipeline, announcer_voice = init_kokoro_voice()
     output_filename = generate_voice_comment(text,
                                              kokoro_pipeline,

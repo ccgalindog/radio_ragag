@@ -1,11 +1,13 @@
 import re
+import os
 from transformers import AutoProcessor, AutoModelForMultimodalLM
 from agent_tools import search_tool
 from kokoro_voice import text_to_speech
 
 
-SYSTEM_PROMPT_PATH = "./prompts/system_prompt.txt"
-FUNFACTS_PROMPT_PATH = "./prompts/funfacts_prompt.txt"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+SYSTEM_PROMPT_PATH = os.path.join(BASE_DIR, "prompts", "system_prompt.txt")
+FUNFACTS_PROMPT_PATH = os.path.join(BASE_DIR, "prompts", "funfacts_prompt.txt")
 MODEL_ID = "google/gemma-4-E2B-it"
 
 
@@ -116,10 +118,13 @@ class PodcastAgent:
                                                   add_generation_prompt=True)
         inputs = self.processor(text=text, return_tensors="pt")\
                      .to(self.model.device)
-        out = self.model.generate(**inputs, max_new_tokens=1280)
+        out = self.model.generate(**inputs,
+                                  max_new_tokens=1280,
+                                  temperature=0.8)
         generated_tokens = out[0][len(inputs["input_ids"][0]):]
         output = self.processor.decode(generated_tokens,
-                                       skip_special_tokens=True)
+                                       skip_special_tokens=True)\
+                                .replace("*", "")
         message[-1]["content"] = output
         return output, message
 
@@ -149,10 +154,17 @@ class PodcastAgent:
         Returns:
             str: The path to the generated wav file.
         """
+        print("Creating funfact comment for song: ", song, " by artist: ", artist)
         message = self.get_funfacts_request(song, artist)
+        print("Message: ", message)
         final_output = self.create_podcast_agent_plan(message)
+        print("Final output: ", final_output)
         calls = self.extract_tool_calls(final_output)
+        print("Calls: ", calls)
         message = self.get_tools_responses(calls, message)
+        print("Message: ", message)
         podcast_script, message = self.create_podcast_dialog(message)
+        print("Podcast script: ", podcast_script)
         audio_path = text_to_speech(podcast_script)
+        print("Audio path: ", audio_path)
         return audio_path
