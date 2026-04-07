@@ -1,6 +1,8 @@
-# 🎵 AI DJ - Your Personal Music Companion
+# 🎵 Radio RAGAG
 
-A modern, AI-powered DJ application built with React and TypeScript that provides an immersive music experience with YouTube video integration, interactive playlists, and fascinating music facts.
+![Radio RAGAG Logo](images/logo.png)
+
+A modern, AI-powered DJ application built with React and TypeScript that provides an immersive music experience with YouTube video integration, and fascinating music facts.
 
 ## ✨ Features
 
@@ -9,6 +11,7 @@ A modern, AI-powered DJ application built with React and TypeScript that provide
 - **🎛️ Advanced Player Controls**: Play, pause, skip, seek, and volume control
 - **💡 Fun Facts**: Learn interesting trivia about each song and artist
 - **🎨 Modern UI**: Beautiful, responsive design with glass morphism effects
+- **Translated lyrics**: Watch synced lyrics in english and spanish.
 - **📱 Responsive Design**: Works perfectly on desktop and mobile devices
 
 ## 🎵 Classic Rock Playlist
@@ -48,6 +51,12 @@ npm run dev
 
 4. Open your browser and navigate to `http://localhost:3000`
 
+5. Start the Agentic Backend
+
+```bash
+python3 src/ragag_brain/app_radio_agent.py
+```
+
 ## 🛠️ Tech Stack
 
 - **Frontend**: React 18 with TypeScript
@@ -61,18 +70,26 @@ npm run dev
 
 ```
 src/
-├── components/          # React components
-│   ├── VideoPlayer.tsx  # YouTube video player
-│   ├── Playlist.tsx     # Song playlist display
+├── components/            # React components
+│   ├── VideoPlayer.tsx    # YouTube video player
+│   ├── Playlist.tsx       # Song playlist display
 │   ├── PlayerControls.tsx # Playback controls
-│   └── FunFacts.tsx     # Song trivia display
-├── data/               # Static data
-│   └── playlist.ts     # Song playlist data
-├── types/              # TypeScript type definitions
-│   └── index.ts        # Interface definitions
-├── App.tsx             # Main application component
-├── main.tsx            # Application entry point
-└── index.css           # Global styles
+│   ├── FunFacts.tsx       # Song trivia display
+│   └── LyricsDisplay.tsx  # Song lyrics display
+├── data/                  # Static data and generated files
+│   ├── playlist.ts        # Song playlist data
+│   └── voice_comments/    # AI-generated podcast audio
+├── ragag_brain/           # Agentic AI backend
+│   ├── app_radio_agent.py # Backend server API (Flask/FastAPI)
+│   ├── podcast_agent.py   # LLM Podcast agent builder
+│   ├── kokoro_voice.py    # Text-to-speech generation
+│   ├── agent_tools.py     # Tools for the AI agent
+│   └── prompts/           # LLM system prompts
+├── types/                 # TypeScript type definitions
+│   └── index.ts           # Interface definitions
+├── App.tsx                # Main application component
+├── main.tsx               # Application entry point
+└── index.css              # Global styles
 ```
 
 ## 🎮 How to Use
